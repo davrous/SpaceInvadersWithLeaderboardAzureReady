@@ -2,6 +2,8 @@
 
 A modern recreation of the classic Space Invaders arcade game built with HTML5 Canvas and a Node.js backend for level management.
 
+DevDay Edition
+
 ## 🎮 Features
 
 - **HTML5 Canvas Game Engine**: Smooth 60 FPS gameplay with retro pixel-perfect graphics
