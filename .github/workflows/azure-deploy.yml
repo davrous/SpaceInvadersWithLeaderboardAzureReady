@@ -81,18 +81,29 @@ jobs:
         run: |
           export PATH="$HOME/.azd/bin:$PATH"
           
-          # Decode and restore environment configuration
+          # Decode and restore environment configuration if provided
           if [ -n "$AZD_INITIAL_ENVIRONMENT_CONFIG" ]; then
-            echo "$AZD_INITIAL_ENVIRONMENT_CONFIG" | base64 -d > .env.azd
-            azd env refresh -e $AZURE_ENV_NAME --from-dotenv .env.azd || true
+            echo "Restoring environment configuration from secret..."
+            if echo "$AZD_INITIAL_ENVIRONMENT_CONFIG" | base64 -d > .env.azd 2>/dev/null; then
+              echo "Successfully decoded environment config"
+              azd env refresh -e $AZURE_ENV_NAME --from-dotenv .env.azd || echo "Warning: Could not refresh environment from config"
+            else
+              echo "Warning: Could not decode AZD_INITIAL_ENVIRONMENT_CONFIG - will create fresh environment"
+            fi
+          else
+            echo "No AZD_INITIAL_ENVIRONMENT_CONFIG provided - creating fresh environment"
           fi
           
           # Ensure environment exists
-          azd env select $AZURE_ENV_NAME || azd env new $AZURE_ENV_NAME
+          echo "Setting up azd environment: $AZURE_ENV_NAME"
+          azd env select $AZURE_ENV_NAME 2>/dev/null || azd env new $AZURE_ENV_NAME
           
           # Set required values
+          echo "Configuring Azure settings..."
           azd env set AZURE_LOCATION $AZURE_LOCATION
           azd env set AZURE_SUBSCRIPTION_ID $AZURE_SUBSCRIPTION_ID
+          
+          echo "Environment configuration complete"
         env:
           AZD_INITIAL_ENVIRONMENT_CONFIG: ${{ secrets.AZD_INITIAL_ENVIRONMENT_CONFIG }}
         shell: bash
