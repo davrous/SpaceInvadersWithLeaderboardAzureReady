@@ -53,7 +53,18 @@ az ad app federated-credential create \
     "audiences": ["api://AzureADTokenExchange"]
   }'
 
-# 7. Get your Tenant ID
+# 7. Configure OIDC federation for pull requests (REQUIRED for PR deployments)
+az ad app federated-credential create \
+  --id $APP_ID \
+  --parameters '{
+    "name": "github-deploy-pr",
+    "issuer": "https://token.actions.githubusercontent.com",
+    "subject": "repo:'$GITHUB_ORG'/'$GITHUB_REPO':pull_request",
+    "description": "GitHub Actions deployment from pull requests",
+    "audiences": ["api://AzureADTokenExchange"]
+  }'
+
+# 8. Get your Tenant ID
 TENANT_ID=$(az account show --query tenantId -o tsv)
 echo "Tenant ID: $TENANT_ID"
 ```
