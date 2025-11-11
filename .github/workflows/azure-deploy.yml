@@ -124,7 +124,14 @@ jobs:
           azd env set AZURE_LOCATION $AZURE_LOCATION
           azd env set AZURE_SUBSCRIPTION_ID $AZURE_SUBSCRIPTION_ID
           
+          # Set the resource group name (azd expects this format)
+          RESOURCE_GROUP="rg-${AZURE_ENV_NAME}"
+          echo "Setting resource group: $RESOURCE_GROUP"
+          azd env set AZURE_RESOURCE_GROUP $RESOURCE_GROUP
+          
           echo "Environment configuration complete"
+          echo "Environment values:"
+          azd env get-values
         env:
           AZD_INITIAL_ENVIRONMENT_CONFIG: ${{ secrets.AZD_INITIAL_ENVIRONMENT_CONFIG }}
         shell: bash
