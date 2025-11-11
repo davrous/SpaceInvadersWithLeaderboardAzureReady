@@ -41,22 +41,72 @@ jobs:
         run: npm ci
 
       - name: Install Azure Developer CLI
-        uses: Azure/setup-azd@v1.0.0
+        run: |
+          # Install azd using the official install script with retry logic
+          for i in 1 2 3; do
+            echo "Attempt $i to install azd..."
+            if curl -fsSL https://aka.ms/install-azd.sh | bash; then
+              echo "azd installed successfully"
+              break
+            else
+              echo "Install attempt $i failed"
+              if [ $i -eq 3 ]; then
+                echo "Failed to install azd after 3 attempts"
+                exit 1
+              fi
+              sleep 5
+            fi
+          done
+          
+          # Add azd to PATH
+          if [ -d "$HOME/.azd/bin" ]; then
+            echo "$HOME/.azd/bin" >> $GITHUB_PATH
+          fi
+        shell: bash
+
+      - name: Verify azd installation
+        run: |
+          export PATH="$HOME/.azd/bin:$PATH"
+          azd version
+        shell: bash
 
       - name: Log in to Azure with OIDC
-        uses: azure/login@v2
+        uses: azure/login@v1.6.1
         with:
           client-id: ${{ secrets.AZURE_CLIENT_ID }}
           tenant-id: ${{ secrets.AZURE_TENANT_ID }}
           subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
 
-      - name: Provision and Deploy to Azure
-        run: azd up --no-prompt
+      - name: Configure azd environment
+        run: |
+          export PATH="$HOME/.azd/bin:$PATH"
+          
+          # Decode and restore environment configuration
+          if [ -n "$AZD_INITIAL_ENVIRONMENT_CONFIG" ]; then
+            echo "$AZD_INITIAL_ENVIRONMENT_CONFIG" | base64 -d > .env.azd
+            azd env refresh -e $AZURE_ENV_NAME --from-dotenv .env.azd || true
+          fi
+          
+          # Ensure environment exists
+          azd env select $AZURE_ENV_NAME || azd env new $AZURE_ENV_NAME
+          
+          # Set required values
+          azd env set AZURE_LOCATION $AZURE_LOCATION
+          azd env set AZURE_SUBSCRIPTION_ID $AZURE_SUBSCRIPTION_ID
         env:
           AZD_INITIAL_ENVIRONMENT_CONFIG: ${{ secrets.AZD_INITIAL_ENVIRONMENT_CONFIG }}
+        shell: bash
+
+      - name: Provision and Deploy to Azure
+        run: |
+          export PATH="$HOME/.azd/bin:$PATH"
+          azd up --no-prompt
+        shell: bash
 
       - name: Deployment Summary
         if: success()
         run: |
+          export PATH="$HOME/.azd/bin:$PATH"
           echo "✅ Deployment successful!"
           echo "🌐 Application URL: $(azd env get-values | grep APP_SERVICE_URL | cut -d'=' -f2)"
+        shell: bash
