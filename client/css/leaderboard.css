@@ -1,0 +1,573 @@
+/* ============================================================================
+   Leaderboard and Authentication Styles
+   ============================================================================ */
+
+/* Sign-In Modal */
+.modal {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.85);
+    z-index: 10000;
+    justify-content: center;
+    align-items: center;
+    animation: modalFadeIn 0.3s ease;
+}
+
+@keyframes modalFadeIn {
+    from {
+        opacity: 0;
+    }
+    to {
+        opacity: 1;
+    }
+}
+
+.modal-content {
+    background: rgba(0, 30, 0, 0.98);
+    border: 3px solid #00ff00;
+    border-radius: 12px;
+    padding: 30px;
+    max-width: 500px;
+    width: 90%;
+    max-height: 80vh;
+    overflow-y: auto;
+    box-shadow: 0 0 40px rgba(0, 255, 0, 0.5);
+    position: relative;
+    animation: modalSlideIn 0.3s ease;
+}
+
+@keyframes modalSlideIn {
+    from {
+        transform: translateY(-50px);
+        opacity: 0;
+    }
+    to {
+        transform: translateY(0);
+        opacity: 1;
+    }
+}
+
+.modal-close {
+    position: absolute;
+    top: 15px;
+    right: 15px;
+    background: transparent;
+    border: none;
+    color: #00ff00;
+    font-size: 28px;
+    cursor: pointer;
+    padding: 0;
+    width: 32px;
+    height: 32px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.2s ease;
+}
+
+.modal-close:hover {
+    color: #ff0000;
+    transform: scale(1.2);
+}
+
+.modal-title {
+    font-family: 'Press Start 2P', monospace;
+    font-size: 18px;
+    color: #00ff00;
+    margin: 0 0 15px 0;
+    text-align: center;
+    text-shadow: 0 0 10px rgba(0, 255, 0, 0.5);
+}
+
+.modal-score {
+    font-family: 'Press Start 2P', monospace;
+    font-size: 14px;
+    color: #00ddff;
+    text-align: center;
+    margin: 15px 0;
+    padding: 12px;
+    background: rgba(0, 221, 255, 0.1);
+    border: 1px solid #00ddff;
+    border-radius: 6px;
+}
+
+.modal-description {
+    font-family: 'Press Start 2P', monospace;
+    font-size: 10px;
+    color: #00ff00;
+    text-align: center;
+    line-height: 1.6;
+    margin: 20px 0;
+}
+
+.modal-auth-buttons {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    margin: 20px 0;
+}
+
+.modal-continue-btn {
+    width: 100%;
+    padding: 12px 24px;
+    background: rgba(100, 100, 100, 0.5);
+    color: #fff;
+    border: 2px solid #666;
+    border-radius: 6px;
+    font-family: 'Press Start 2P', monospace;
+    font-size: 10px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    margin-top: 15px;
+}
+
+.modal-continue-btn:hover {
+    background: rgba(120, 120, 120, 0.7);
+    border-color: #888;
+    transform: translateY(-2px);
+}
+
+/* Authentication Section */
+.auth-section {
+    background: rgba(0, 20, 0, 0.95);
+    border: 2px solid #00ff00;
+    border-radius: 8px;
+    padding: 15px;
+    box-shadow: 0 0 20px rgba(0, 255, 0, 0.3);
+}
+
+.auth-buttons {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.auth-btn {
+    display: block;
+    padding: 10px 16px;
+    border: 2px solid;
+    border-radius: 6px;
+    font-family: 'Press Start 2P', monospace;
+    font-size: 10px;
+    text-decoration: none;
+    text-align: center;
+    transition: all 0.3s ease;
+    cursor: pointer;
+}
+
+.auth-github {
+    background: #333;
+    color: #fff;
+    border-color: #555;
+}
+
+.auth-github:hover {
+    background: #444;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
+}
+
+.auth-google {
+    background: #4285f4;
+    color: #fff;
+    border-color: #357ae8;
+}
+
+.auth-google:hover {
+    background: #357ae8;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(66, 133, 244, 0.4);
+}
+
+.auth-microsoft {
+    background: #00a4ef;
+    color: #fff;
+    border-color: #008bcc;
+}
+
+.auth-microsoft:hover {
+    background: #008bcc;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(0, 164, 239, 0.4);
+}
+
+/* User Info Section */
+.user-info {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    padding: 15px;
+    background: rgba(0, 255, 0, 0.1);
+    border: 2px solid #00ff00;
+    border-radius: 6px;
+}
+
+.user-avatar {
+    width: 48px;
+    height: 48px;
+    border-radius: 50%;
+    border: 2px solid #00ff00;
+    object-fit: cover;
+}
+
+.user-name {
+    flex: 1;
+    color: #00ff00;
+    font-family: 'Press Start 2P', monospace;
+    font-size: 12px;
+}
+
+.user-info span {
+    flex: 1;
+    color: #00ff00;
+    font-family: 'Press Start 2P', monospace;
+    font-size: 12px;
+}
+
+.logout-btn {
+    padding: 8px 16px;
+    background: rgba(255, 0, 0, 0.8);
+    color: #fff;
+    border: 2px solid #ff0000;
+    border-radius: 4px;
+    font-family: 'Press Start 2P', monospace;
+    font-size: 10px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.logout-btn:hover {
+    background: #ff0000;
+    transform: scale(1.05);
+}
+
+.user-info button {
+    padding: 8px 16px;
+    background: rgba(255, 0, 0, 0.8);
+    color: #fff;
+    border: 2px solid #ff0000;
+    border-radius: 4px;
+    font-family: 'Press Start 2P', monospace;
+    font-size: 10px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.user-info button:hover {
+    background: #ff0000;
+    transform: scale(1.05);
+}
+
+/* Leaderboard Section */
+.leaderboard-section {
+    background: rgba(0, 20, 0, 0.95);
+    border: 2px solid #00ff00;
+    border-radius: 8px;
+    padding: 15px;
+    box-shadow: 0 0 20px rgba(0, 255, 0, 0.3);
+    flex: 1;
+}
+
+.leaderboard-section h2 {
+    color: #00ff00;
+    font-family: 'Press Start 2P', monospace;
+    font-size: 14px;
+    text-align: center;
+    margin-bottom: 15px;
+    text-shadow: 0 0 10px rgba(0, 255, 0, 0.5);
+}
+
+.leaderboard {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.leaderboard-entry {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 8px;
+    background: rgba(0, 50, 0, 0.5);
+    border: 1px solid rgba(0, 255, 0, 0.2);
+    border-radius: 4px;
+    transition: all 0.3s ease;
+}
+
+.leaderboard-entry:hover {
+    background: rgba(0, 100, 0, 0.5);
+    border-color: rgba(0, 255, 0, 0.5);
+    transform: translateX(4px);
+}
+
+.leaderboard-entry .rank {
+    font-family: 'Press Start 2P', monospace;
+    font-size: 11px;
+    color: #ffff00;
+    min-width: 30px;
+    text-align: center;
+}
+
+.leaderboard-entry .avatar {
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    border: 2px solid #00ff00;
+    object-fit: cover;
+}
+
+.leaderboard-entry .username {
+    flex: 1;
+    font-family: 'Press Start 2P', monospace;
+    font-size: 9px;
+    color: #00ff00;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.leaderboard-entry .score {
+    font-family: 'Press Start 2P', monospace;
+    font-size: 11px;
+    color: #fff;
+    font-weight: bold;
+    white-space: nowrap;
+}
+
+/* Current User Highlight */
+.leaderboard-entry.current-user {
+    background: rgba(0, 255, 0, 0.15);
+    border: 2px solid #00ff00;
+    box-shadow: 0 0 15px rgba(0, 255, 0, 0.4);
+}
+
+.leaderboard-entry.current-user .username {
+    font-weight: bold;
+    text-shadow: 0 0 5px rgba(0, 255, 0, 0.8);
+}
+
+/* Empty State */
+.leaderboard-empty {
+    padding: 40px 20px;
+    text-align: center;
+    color: #00ff00;
+    font-family: 'Press Start 2P', monospace;
+    font-size: 14px;
+}
+
+/* Personal Stats Section */
+.stats-section {
+    background: rgba(0, 20, 0, 0.95);
+    border: 2px solid #00ff00;
+    border-radius: 8px;
+    padding: 20px;
+    margin: 20px auto;
+    max-width: 600px;
+    box-shadow: 0 0 20px rgba(0, 255, 0, 0.3);
+}
+
+.stats-section h3 {
+    color: #00ff00;
+    font-family: 'Press Start 2P', monospace;
+    font-size: 16px;
+    margin-bottom: 15px;
+    text-align: center;
+}
+
+.stats-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 15px;
+}
+
+.stat-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 15px;
+    background: rgba(0, 50, 0, 0.5);
+    border: 1px solid rgba(0, 255, 0, 0.3);
+    border-radius: 4px;
+}
+
+.stat-label {
+    font-family: 'Press Start 2P', monospace;
+    font-size: 10px;
+    color: #00ff00;
+    margin-bottom: 8px;
+}
+
+.stat-value {
+    font-family: 'Press Start 2P', monospace;
+    font-size: 16px;
+    color: #fff;
+    font-weight: bold;
+}
+
+/* Message System */
+.message-container {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    z-index: 10000;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    pointer-events: none;
+}
+
+.message {
+    padding: 15px 20px;
+    background: rgba(0, 20, 0, 0.95);
+    border: 2px solid #00ff00;
+    border-radius: 6px;
+    color: #00ff00;
+    font-family: 'Press Start 2P', monospace;
+    font-size: 10px;
+    box-shadow: 0 4px 15px rgba(0, 255, 0, 0.3);
+    opacity: 0;
+    transform: translateX(100%);
+    transition: all 0.3s ease;
+    pointer-events: auto;
+}
+
+.message.show {
+    opacity: 1;
+    transform: translateX(0);
+}
+
+.message-success {
+    border-color: #00ff00;
+    color: #00ff00;
+}
+
+.message-error {
+    border-color: #ff0000;
+    color: #ff0000;
+}
+
+.message-warning {
+    border-color: #ffff00;
+    color: #ffff00;
+}
+
+.message-info {
+    border-color: #00aaff;
+    color: #00aaff;
+}
+
+/* Loading Placeholder */
+.skeleton-loader {
+    background: linear-gradient(90deg, 
+        rgba(0, 50, 0, 0.5) 25%, 
+        rgba(0, 100, 0, 0.5) 50%, 
+        rgba(0, 50, 0, 0.5) 75%
+    );
+    background-size: 200% 100%;
+    animation: skeleton-loading 1.5s infinite;
+    border-radius: 4px;
+}
+
+@keyframes skeleton-loading {
+    0% {
+        background-position: 200% 0;
+    }
+    100% {
+        background-position: -200% 0;
+    }
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    .auth-section,
+    .leaderboard-section,
+    .stats-section {
+        margin: 15px;
+        padding: 15px;
+    }
+    
+    .auth-btn {
+        font-size: 10px;
+        padding: 10px 20px;
+    }
+    
+    .leaderboard-section h2 {
+        font-size: 14px;
+    }
+    
+    .leaderboard-entry {
+        padding: 8px;
+        gap: 8px;
+    }
+    
+    .leaderboard-entry .avatar {
+        width: 32px;
+        height: 32px;
+    }
+    
+    .leaderboard-entry .username {
+        font-size: 10px;
+    }
+    
+    .leaderboard-entry .score {
+        font-size: 12px;
+    }
+    
+    .stats-grid {
+        grid-template-columns: 1fr;
+    }
+    
+    .message-container {
+        right: 10px;
+        left: 10px;
+    }
+    
+    .message {
+        font-size: 9px;
+        padding: 12px 16px;
+    }
+}
+
+@media (max-width: 480px) {
+    .auth-section,
+    .leaderboard-section,
+    .stats-section {
+        border-radius: 4px;
+        padding: 12px;
+    }
+    
+    .auth-btn {
+        font-size: 9px;
+        padding: 8px 16px;
+        min-height: 44px; /* Better touch target */
+    }
+    
+    .leaderboard-section h2 {
+        font-size: 12px;
+    }
+    
+    .leaderboard-entry .rank {
+        font-size: 10px;
+        min-width: 30px;
+    }
+    
+    .leaderboard-entry .username {
+        font-size: 9px;
+    }
+    
+    .leaderboard-entry .score {
+        font-size: 10px;
+    }
+    
+    .stat-label {
+        font-size: 8px;
+    }
+    
+    .stat-value {
+        font-size: 12px;
+    }
+}

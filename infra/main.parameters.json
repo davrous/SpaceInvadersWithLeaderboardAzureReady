@@ -1,0 +1,21 @@
+{
+  "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentParameters.json#",
+  "contentVersion": "1.0.0.0",
+  "parameters": {
+    "environmentName": {
+      "value": "${AZURE_ENV_NAME}"
+    },
+    "location": {
+      "value": "${AZURE_LOCATION}"
+    },
+    "appServiceName": {
+      "value": "${SERVICE_APP_NAME=space-invaders-app}"
+    },
+    "appServicePlanSku": {
+      "value": "${APP_SERVICE_PLAN_SKU=B1}"
+    },
+    "nodeVersion": {
+      "value": "${NODE_VERSION=22-lts}"
+    }
+  }
+}

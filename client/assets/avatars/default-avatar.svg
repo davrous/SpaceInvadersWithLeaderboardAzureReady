@@ -1,0 +1,33 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" width="64" height="64">
+  <defs>
+    <style>
+      .pixel { fill: #00ff00; }
+      .dark { fill: #008800; }
+      .bg { fill: #001100; }
+    </style>
+  </defs>
+  
+  <!-- Background -->
+  <rect class="bg" width="64" height="64"/>
+  
+  <!-- Retro pixel art spaceman helmet -->
+  <!-- Helmet outline -->
+  <rect class="pixel" x="20" y="12" width="4" height="4"/>
+  <rect class="pixel" x="24" y="8" width="16" height="4"/>
+  <rect class="pixel" x="40" y="12" width="4" height="4"/>
+  <rect class="pixel" x="16" y="16" width="4" height="24"/>
+  <rect class="pixel" x="44" y="16" width="4" height="24"/>
+  <rect class="pixel" x="20" y="40" width="4" height="4"/>
+  <rect class="pixel" x="40" y="40" width="4" height="4"/>
+  <rect class="pixel" x="24" y="44" width="16" height="4"/>
+  
+  <!-- Visor (darker green) -->
+  <rect class="dark" x="20" y="16" width="24" height="20"/>
+  
+  <!-- Eyes -->
+  <rect class="pixel" x="24" y="20" width="4" height="8"/>
+  <rect class="pixel" x="36" y="20" width="4" height="8"/>
+  
+  <!-- Body suggestion -->
+  <rect class="pixel" x="28" y="48" width="8" height="12"/>
+</svg>

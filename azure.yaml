@@ -1,0 +1,37 @@
+# yaml-language-server: $schema=https://raw.githubusercontent.com/Azure/azure-dev/main/schemas/v1.0/azure.yaml.json
+
+name: space-invaders-game
+metadata:
+  template: space-invaders-game@0.0.1-beta
+
+services:
+  space-invaders-app:
+    project: .
+    language: js
+    host: appservice
+    hooks:
+      predeploy:
+        windows:
+          shell: pwsh
+          run: |
+            Write-Host "Installing dependencies..."
+            npm install --production
+            Write-Host "Creating data directory for database..."
+            New-Item -ItemType Directory -Force -Path "server/database" | Out-Null
+            Write-Host "Pre-deploy complete!"
+        posix:
+          shell: sh
+          run: |
+            echo "Installing dependencies..."
+            npm install --production
+            echo "Creating data directory for database..."
+            mkdir -p server/database
+            echo "Pre-deploy complete!"
+
+infra:
+  provider: bicep
+  path: infra
+  module: main
+
+pipeline:
+  provider: github

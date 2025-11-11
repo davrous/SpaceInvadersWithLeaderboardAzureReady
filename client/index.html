@@ -1,0 +1,223 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Space Invaders - HTML5 Game</title>
+    <meta name="description" content="Classic Space Invaders game built with HTML5 Canvas and JavaScript">
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/leaderboard.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <style>
+        /* Prevent text selection and improve touch performance */
+        body {
+            -webkit-touch-callout: none;
+            -webkit-user-select: none;
+            -khtml-user-select: none;
+            -moz-user-select: none;
+            -ms-user-select: none;
+            user-select: none;
+            -webkit-tap-highlight-color: transparent;
+        }
+    </style>
+</head>
+<body>
+    <div class="game-container">
+        <!-- Game Header -->
+        <header class="game-header">
+            <h1 class="game-title">Space Invaders</h1>
+            
+            <div class="game-stats">
+                <div class="stat-item">
+                    <span class="stat-label">Score</span>
+                    <span class="stat-value" id="scoreValue">0</span>
+                </div>
+                <div class="stat-item">
+                    <span class="stat-label">High Score</span>
+                    <span class="stat-value" id="highScoreValue">0</span>
+                </div>
+                <div class="stat-item">
+                    <span class="stat-label">Lives</span>
+                    <div class="lives-container" id="livesContainer">
+                        <div class="life-icon"></div>
+                        <div class="life-icon"></div>
+                        <div class="life-icon"></div>
+                    </div>
+                </div>
+            </div>
+        </header>
+
+        <!-- Main Content Wrapper -->
+        <div class="content-wrapper">
+            <!-- Left Sidebar -->
+            <aside class="left-sidebar">
+                <!-- Authentication Section -->
+                <div class="auth-section">
+                    <div id="auth-buttons" class="auth-buttons">
+                        <h3 style="margin-bottom: 12px; color: #00ff00; font-size: 0.9rem;">Sign in to save your score</h3>
+                        <a href="/auth/github" class="auth-btn auth-github">
+                            <span>Sign in with GitHub</span>
+                        </a>
+                        <a href="/auth/google" class="auth-btn auth-google">
+                            <span>Sign in with Google</span>
+                        </a>
+                        <a href="/auth/microsoft" class="auth-btn auth-microsoft">
+                            <span>Sign in with Microsoft</span>
+                        </a>
+                    </div>
+                    <div id="user-info" class="user-info" style="display: none;">
+                        <img id="user-avatar" class="user-avatar" src="/assets/avatars/default-avatar.svg" alt="User avatar">
+                        <span id="user-name" class="user-name">Player</span>
+                        <button id="logout-button" class="logout-btn">Sign Out</button>
+                    </div>
+                </div>
+
+                <!-- Leaderboard Section -->
+                <div class="leaderboard-section">
+                    <h2>🏆 Top Players</h2>
+                    <div id="leaderboard-container" class="leaderboard" role="list" aria-live="polite">
+                        <!-- Populated by JavaScript -->
+                    </div>
+                </div>
+
+                <!-- Personal Stats Section -->
+                <aside id="personal-stats" class="stats-section" style="display: none;">
+                    <!-- Populated by JavaScript -->
+                </aside>
+            </aside>
+
+            <!-- Game Area -->
+            <main class="game-area">
+                <!-- Canvas and Level Progress Side by Side -->
+                <div class="game-canvas-wrapper">
+                    <canvas id="gameCanvas" width="800" height="600"></canvas>
+                    
+                    <!-- Level Progress -->
+                    <div class="level-progress">
+                        <div class="level-info">
+                            <div class="stat-label">Level</div>
+                            <div class="level-number" id="levelNumber">1</div>
+                        </div>
+                        <div class="progress-bar">
+                            <div class="progress-fill" id="progressFill"></div>
+                        </div>
+                        <div class="stat-label" style="margin-top: 8px; font-size: 0.7em;" id="progressText">0 / 35 enemies</div>
+                    </div>
+                </div>
+
+                <!-- Game Controls (Desktop) - Always Below Canvas -->
+                <div class="game-controls">
+                    <button class="control-btn" id="pauseBtn">Pause</button>
+                    <button class="control-btn" id="restartBtn">Restart</button>
+                </div>
+
+                <!-- Mobile Controls -->
+                <div class="mobile-controls">
+                    <div class="mobile-move-controls">
+                        <button class="mobile-btn" id="leftBtn">◀</button>
+                        <button class="mobile-btn" id="rightBtn">▶</button>
+                    </div>
+                    <button class="mobile-btn fire-btn" id="fireBtn">🚀</button>
+                </div>
+
+                <!-- Game Overlay -->
+                <div class="game-overlay" id="gameOverlay">
+                    <div class="overlay-message">
+                        <h2 class="overlay-title" id="overlayTitle">Game Over</h2>
+                        <p class="overlay-subtitle" id="overlaySubtitle">Press Space to continue</p>
+                        <div class="game-controls">
+                            <button class="control-btn" id="overlayActionBtn">Start Game</button>
+                            <button class="control-btn" id="overlaySecondaryBtn" style="display: none;">Next Level</button>
+                        </div>
+                    </div>
+                </div>
+            </main>
+        </div>
+    </div>
+
+    <!-- Message Container for notifications -->
+    <div id="message-container" class="message-container"></div>
+
+    <!-- Instructions Modal (shown on first load) -->
+    <div class="game-overlay active" id="instructionsOverlay">
+        <div class="overlay-message">
+            <h2 class="overlay-title">Space Invaders</h2>
+            <div class="overlay-subtitle">
+                <p style="margin-bottom: 15px;">Defend Earth from the alien invasion!</p>
+                <div style="text-align: left; margin-bottom: 20px; font-size: 0.9em;">
+                    <strong>Controls:</strong><br>
+                    🖥️ Desktop: Arrow Keys or A/D to move, Spacebar to shoot<br>
+                    📱 Mobile: Touch controls at bottom of screen<br><br>
+                    <strong>Gameplay:</strong><br>
+                    • Destroy all enemies to advance to the next level<br>
+                    • Avoid enemy bullets and don't let them reach the bottom<br>
+                    • Difficulty increases with each level<br>
+                    • Score points for each enemy destroyed
+                </div>
+            </div>
+            <div class="game-controls">
+                <button class="control-btn pulse" id="startGameBtn">Start Game</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Sign-In Modal -->
+    <div id="signin-modal" class="modal" style="display: none;">
+        <div class="modal-content">
+            <button id="signin-modal-close" class="modal-close" aria-label="Close modal">&times;</button>
+            <h2 class="modal-title">🎮 Sign in to Save Your Score!</h2>
+            <p id="modal-score-display" class="modal-score">Score: 0 | Level: 1</p>
+            <p class="modal-description">Sign in with your favorite platform to save your score to the leaderboard:</p>
+            <div class="modal-auth-buttons">
+                <a href="/auth/github" class="auth-btn auth-github">
+                    <span>Sign in with GitHub</span>
+                </a>
+                <a href="/auth/google" class="auth-btn auth-google">
+                    <span>Sign in with Google</span>
+                </a>
+                <a href="/auth/microsoft" class="auth-btn auth-microsoft">
+                    <span>Sign in with Microsoft</span>
+                </a>
+            </div>
+            <button id="continue-without-signin" class="modal-continue-btn">Continue without signing in</button>
+        </div>
+    </div>
+
+    <!-- Audio Elements (for future sound effects) -->
+    <audio id="shootSound" preload="auto">
+        <!-- Sound files would go here -->
+    </audio>
+    <audio id="explosionSound" preload="auto">
+        <!-- Sound files would go here -->
+    </audio>
+    <audio id="backgroundMusic" preload="auto" loop>
+        <!-- Background music would go here -->
+    </audio>
+
+    <!-- Game Scripts -->
+    <script src="js/soundManager.js"></script>
+    <script src="js/entities.js"></script>
+    <script src="js/utils.js"></script>
+    <script src="js/game.js"></script>
+    <script src="js/auth.js"></script>
+    <script src="js/leaderboard.js"></script>
+    <script src="js/main.js"></script>
+
+    <!-- Service Worker for PWA (optional) -->
+    <script>
+        // Register service worker for offline play (if implemented)
+        if ('serviceWorker' in navigator) {
+            window.addEventListener('load', () => {
+                navigator.serviceWorker.register('/sw.js')
+                    .then(registration => {
+                        console.log('SW registered: ', registration);
+                    })
+                    .catch(registrationError => {
+                        console.log('SW registration failed: ', registrationError);
+                    });
+            });
+        }
+    </script>
+</body>
+</html>
