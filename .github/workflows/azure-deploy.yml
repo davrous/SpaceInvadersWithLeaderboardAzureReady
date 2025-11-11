@@ -26,8 +26,6 @@ jobs:
       AZURE_SUBSCRIPTION_ID: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
       AZURE_ENV_NAME: ${{ secrets.AZURE_ENV_NAME }}
       AZURE_LOCATION: ${{ secrets.AZURE_LOCATION }}
-      # Tell azd to skip interactive login prompts and use Azure CLI auth
-      AZURE_AUTH_TYPE: CLI
 
     steps:
       - name: Checkout code
@@ -84,6 +82,20 @@ jobs:
           # Ensure the correct subscription is active
           az account set --subscription $AZURE_SUBSCRIPTION_ID
           az account show
+        shell: bash
+
+      - name: Authenticate Azure Developer CLI
+        run: |
+          export PATH="$HOME/.azd/bin:$PATH"
+          
+          # Login azd using federated credentials (OIDC)
+          echo "Logging in to Azure Developer CLI with OIDC..."
+          azd auth login \
+            --client-id "$AZURE_CLIENT_ID" \
+            --federated-credential-provider "github" \
+            --tenant-id "$AZURE_TENANT_ID"
+          
+          echo "azd authentication complete"
         shell: bash
 
       - name: Configure azd environment
