@@ -2,7 +2,9 @@
 
 A modern recreation of the classic Space Invaders arcade game built with HTML5 Canvas and a Node.js backend for level management.
 
-DevDay Edition
+Please find the full PowerPoint deck [there](https://1drv.ms/p/c/0ee4bd0f5ea745c6/IQCYsn2LZQD8Rbouq3uf0DX0AQYdK9l8wjS3gKBYM5tW358?e=l0R9JW) that will contain the full instructions & setup to build the same game, deploy to Azure and improve it using the various MCP Servers used (AI Toolkit, Figma, PlayWright and Azure MCP). 
+
+VS Code Live / DevDay Edition
 
 ## 🎮 Features
 
